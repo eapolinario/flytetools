@@ -55,7 +55,7 @@ jobs:
         id: tags
         uses: docker/metadata-action@v3
         with:
-          images: ghcr.io/${{ inputs.repository }}/${{ inputs.component }}
+          images: ghcr.io/${{ inputs.github-organization }}/${{ inputs.component }}
           tags: |
             type=raw,value=latest
             type=raw,value=${{ inputs.version }}
