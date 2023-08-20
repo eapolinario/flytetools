@@ -15,10 +15,6 @@ on:
         description: "Version of image"
         required: true
         type: string
-      github-organization:
-        description: "Organization Name"
-        required: true
-        type: string
       push:
         description: "Push to registry"
         required: false
@@ -55,7 +51,7 @@ jobs:
         id: tags
         uses: docker/metadata-action@v3
         with:
-          images: ghcr.io/${{ inputs.github-organization }}/${{ inputs.component }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ inputs.component }}
           tags: |
             type=raw,value=latest
             type=raw,value=${{ inputs.version }}
