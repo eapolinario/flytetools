@@ -3,6 +3,10 @@ name: Build & Push Docker Image
 on:
   workflow_call:
     inputs:
+      component:
+        description: "Component name (i.e. flytepropeller, flyteadmin, etc)"
+        required: true
+        type: string
       dockerfile:
         description: "Dockerfile name"
         required: true
@@ -10,10 +14,6 @@ on:
       version:
         description: "Version of image"
         required: true
-        type: string
-      repository:
-        description: "Repository Name"
-        required: false
         type: string
       push:
         description: "Push to registry"
@@ -51,7 +51,7 @@ jobs:
         id: tags
         uses: docker/metadata-action@v3
         with:
-          images: ghcr.io/${{ inputs.repository }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ inputs.component }}
           tags: |
             type=raw,value=latest
             type=raw,value=${{ inputs.version }}
@@ -61,8 +61,8 @@ jobs:
       - name: Build and Push Image
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ${{ inputs.dockerfile }}
+          context: ${{ inputs.component }}
+          file: ${{ inputs.component }}/${{ inputs.dockerfile }}
           platforms: linux/arm64,linux/amd64
           push: ${{ inputs.push }}
           tags: ${{ steps.tags.outputs.tags }}
